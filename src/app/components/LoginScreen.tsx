@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Card, CardBody, Input, Link } from "@heroui/react";
+import { Button, Card, CardHeader, CardBody, Input, Link, Form, Image } from "@heroui/react";
 import { motion } from "framer-motion";
 
 type User = {
@@ -21,7 +21,8 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isRegisterMode, setIsRegisterMode] = useState(false);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (!email || (!isRegisterMode && !password) || (isRegisterMode && !name)) return;
     
     setIsLoading(true);
@@ -59,141 +60,148 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
         transition={{ duration: 0.6 }}
         className="w-full max-w-md"
       >
-        {/* Header con logo */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-          className="text-center mb-8"
-        >
-          <div className="bg-gradient-to-r from-purple-500 to-pink-500 w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-            <span className="text-3xl">🧠</span>
-          </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
-            Emocionario
-          </h1>
-          <p className="text-gray-700 font-medium">Tu espacio de bienestar emocional</p>
-        </motion.div>
-
-        {/* Card principal */}
+        {/* Card principal con la nueva estructura */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.5 }}
         >
           <Card className="backdrop-blur-lg bg-white/95 shadow-2xl border border-gray-100">
-            <CardBody className="p-8">
+            <CardHeader className="pb-0 pt-6 px-8 flex-col items-center">
+              {/* Logo/Icon */}
+              <div className="bg-gradient-to-r from-purple-500 to-pink-500 w-16 h-16 rounded-2xl flex items-center justify-center mb-4 shadow-lg">
+                <span className="text-2xl">🧠</span>
+              </div>
               
-              {/* Título del formulario */}
-              <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-gray-800 mb-2">
+              {/* Titulo principal */}
+              <p className="text-tiny uppercase font-bold text-purple-600">Bienestar Emocional</p>
+              <small className="text-default-500">Tu espacio personal</small>
+              <h4 className="font-bold text-2xl bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                Emocionario
+              </h4>
+              
+              {/* Subtítulo del formulario */}
+              <div className="text-center mt-4 mb-2">
+                <h2 className="text-xl font-bold text-gray-800 mb-1">
                   {isRegisterMode ? "Crear cuenta" : "Iniciar sesión"}
                 </h2>
-                <p className="text-gray-600">
+                <p className="text-gray-600 text-sm">
                   {isRegisterMode ? "Únete a nuestra comunidad" : "Bienvenido de vuelta"}
                 </p>
               </div>
-
-              {/* Formulario tradicional */}
-              <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
-                
+            </CardHeader>
+            
+            <CardBody className="overflow-visible px-8 pb-8">
+              {/* Formulario con los nuevos componentes */}
+              <Form
+                className="w-full flex flex-col gap-4"
+                onSubmit={handleSubmit}
+              >
                 {/* Campo Nombre (solo en registro) */}
                 {isRegisterMode && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Nombre completo
-                    </label>
-                    <Input
-                      type="text"
-                      placeholder="Ingresa tu nombre completo"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      variant="bordered"
-                      size="lg"
-                      classNames={{
-                        input: "text-gray-900",
-                        inputWrapper: "border-gray-300 hover:border-purple-400 focus-within:border-purple-500"
-                      }}
-                      startContent={<span className="text-gray-400">👤</span>}
-                    />
-                  </div>
+                  <Input
+                    isRequired
+                    errorMessage="Por favor ingresa tu nombre completo"
+                    label="Nombre completo"
+                    labelPlacement="outside"
+                    name="name"
+                    placeholder="Ingresa tu nombre completo"
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    variant="bordered"
+                    size="lg"
+                    radius="lg"
+                    classNames={{
+                      label: "text-gray-700 font-medium",
+                      input: "text-gray-900",
+                      inputWrapper: "border-2 border-gray-300 hover:border-purple-400 focus-within:!border-purple-500 shadow-sm bg-white"
+                    }}
+                    startContent={<span className="text-gray-400">👤</span>}
+                  />
                 )}
 
                 {/* Campo Email */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Correo electrónico
-                  </label>
-                  <Input
-                    type="email"
-                    placeholder="ejemplo@correo.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    variant="bordered"
-                    size="lg"
-                    classNames={{
-                      input: "text-gray-900",
-                      inputWrapper: "border-gray-300 hover:border-purple-400 focus-within:border-purple-500"
-                    }}
-                    startContent={<span className="text-gray-400">📧</span>}
-                  />
-                </div>
+                <Input
+                  isRequired
+                  errorMessage="Por favor ingresa un email válido"
+                  label="Correo electrónico"
+                  labelPlacement="outside"
+                  name="email"
+                  placeholder="ejemplo@correo.com"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  variant="bordered"
+                  size="lg"
+                  radius="lg"
+                  classNames={{
+                    label: "text-gray-700 font-medium",
+                    input: "text-gray-900",
+                    inputWrapper: "border-2 border-gray-300 hover:border-purple-400 focus-within:!border-purple-500 shadow-sm bg-white"
+                  }}
+                  startContent={<span className="text-gray-400">📧</span>}
+                />
 
                 {/* Campo Contraseña (solo en login) */}
                 {!isRegisterMode && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Contraseña
-                    </label>
-                    <Input
-                      type="password"
-                      placeholder="Ingresa tu contraseña"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      variant="bordered"
-                      size="lg"
-                      classNames={{
-                        input: "text-gray-900",
-                        inputWrapper: "border-gray-300 hover:border-purple-400 focus-within:border-purple-500"
-                      }}
-                      startContent={<span className="text-gray-400">�</span>}
-                    />
-                  </div>
+                  <Input
+                    isRequired
+                    errorMessage="Por favor ingresa tu contraseña"
+                    label="Contraseña"
+                    labelPlacement="outside"
+                    name="password"
+                    placeholder="Ingresa tu contraseña"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    variant="bordered"
+                    size="lg"
+                    radius="lg"
+                    classNames={{
+                      label: "text-gray-700 font-medium",
+                      input: "text-gray-900",
+                      inputWrapper: "border-2 border-gray-300 hover:border-purple-400 focus-within:!border-purple-500 shadow-sm bg-white"
+                    }}
+                    startContent={<span className="text-gray-400">🔒</span>}
+                  />
                 )}
 
-                {/* Botón Google */}
-                <Button
-                  type="button"
-                  size="lg"
-                  className="w-full bg-white border-2 border-gray-300 hover:border-gray-400 hover:shadow-md text-gray-700 font-semibold"
-                  variant="bordered"
-                  onPress={handleGoogleLogin}
-                  isLoading={isLoading}
-                  startContent={
-                    <div className="w-5 h-5 bg-gradient-to-r from-red-400 via-yellow-400 to-blue-400 rounded-full flex items-center justify-center">
-                      <span className="text-xs text-white font-bold">G</span>
-                    </div>
-                  }
-                >
-                  Continuar con Google
-                </Button>
+                {/* Botones */}
+                <div className="flex flex-col gap-3 mt-4">
+                  {/* Botón Google */}
+                  <Button
+                    type="button"
+                    size="lg"
+                    className="w-full bg-white border-2 border-gray-300 hover:border-gray-400 hover:shadow-md text-gray-700 font-semibold"
+                    variant="bordered"
+                    onPress={handleGoogleLogin}
+                    isLoading={isLoading}
+                    startContent={
+                      <div className="w-5 h-5 bg-gradient-to-r from-red-400 via-yellow-400 to-blue-400 rounded-full flex items-center justify-center">
+                        <span className="text-xs text-white font-bold">G</span>
+                      </div>
+                    }
+                  >
+                    Continuar con Google
+                  </Button>
 
-                {/* Botón Principal */}
-                <Button
-                  type="submit"
-                  size="lg"
-                  className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-bold shadow-lg hover:shadow-xl"
-                  onPress={handleSubmit}
-                  isLoading={isLoading}
-                  isDisabled={!email || (!isRegisterMode && !password) || (isRegisterMode && !name)}
-                >
-                  {isLoading 
-                    ? (isRegisterMode ? "Creando cuenta..." : "Iniciando sesión...") 
-                    : (isRegisterMode ? "Crear cuenta" : "Iniciar sesión")
-                  }
-                </Button>
-
-              </form>
+                  {/* Botón Principal */}
+                  <Button
+                    type="submit"
+                    size="lg"
+                    color="primary"
+                    className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-bold shadow-lg hover:shadow-xl"
+                    isLoading={isLoading}
+                    isDisabled={!email || (!isRegisterMode && !password) || (isRegisterMode && !name)}
+                  >
+                    {isLoading 
+                      ? (isRegisterMode ? "Creando cuenta..." : "Iniciando sesión...") 
+                      : (isRegisterMode ? "Crear cuenta" : "Iniciar sesión")
+                    }
+                  </Button>
+                </div>
+              </Form>
 
               {/* Enlaces de registro/login y olvido de contraseña */}
               <div className="mt-6 text-center space-y-3">
@@ -215,7 +223,6 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
                   </div>
                 )}
               </div>
-
             </CardBody>
           </Card>
         </motion.div>

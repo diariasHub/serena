@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import LoginScreen from "./components/LoginScreen";
 import EmotionSelection from "./components/EmotionSelection";
 import MainDashboard from "./components/MainDashboard";
+import TestHeroUI from "./components/TestHeroUI";
 
 type User = {
   id: string;
