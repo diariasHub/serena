@@ -89,8 +89,26 @@ export default function DailyPhrase({ emotions }: DailyPhraseProps) {
     console.log('Emoción dominante:', dominant, 'Frase:', randomPhrase); // Para debug
   }, [emotions]);
 
+  const generateNewPhrase = () => {
+    // Generar una nueva frase aleatoria para la emoción dominante
+    const emotionPhrases = phrases[dominantEmotion as keyof typeof phrases] || phrases.neutro;
+    let newPhrase;
+    
+    // Asegurar que la nueva frase sea diferente a la actual
+    do {
+      newPhrase = emotionPhrases[Math.floor(Math.random() * emotionPhrases.length)];
+    } while (newPhrase === currentPhrase && emotionPhrases.length > 1);
+    
+    setCurrentPhrase(newPhrase);
+  };
+
   const handleReveal = () => {
     setIsRevealed(true);
+  };
+
+  const handleNewPhrase = () => {
+    setIsRevealed(false);
+    generateNewPhrase();
   };
 
   const emotionEmojis: Record<string, string> = {
@@ -173,7 +191,7 @@ export default function DailyPhrase({ emotions }: DailyPhraseProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
-        onClick={() => setIsRevealed(false)}
+        onClick={handleNewPhrase}
         className="mt-4 text-purple-600 hover:text-purple-700 text-sm font-medium underline"
       >
         Ver otra cajita sorpresa
