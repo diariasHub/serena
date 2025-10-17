@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button, Card, CardBody, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@heroui/react";
+import { Button, Card, CardBody } from "@heroui/react";
 import Calendar from "./Calendar";
 import DailyPhrase from "./DailyPhrase";
 import EmotionsGrid from "./EmotionsGrid";
@@ -27,12 +27,6 @@ export default function MainDashboard({ user, onLogout }: MainDashboardProps) {
     const savedEmotions = JSON.parse(localStorage.getItem('emocionario-emotions') || '{}');
     setEmotions(savedEmotions);
   }, []);
-
-  const handleEmotionUpdate = (date: string, emotion: string) => {
-    const updatedEmotions = { ...emotions, [date]: emotion };
-    setEmotions(updatedEmotions);
-    localStorage.setItem('emocionario-emotions', JSON.stringify(updatedEmotions));
-  };
 
   const openPhraseModal = () => {
     console.log('Abriendo modal de frase diaria');
@@ -77,7 +71,7 @@ export default function MainDashboard({ user, onLogout }: MainDashboardProps) {
         <Card>
           <CardBody className="p-6">
             <h2 className="text-xl font-semibold mb-4 text-gray-800">Tu seguimiento emocional</h2>
-            <Calendar emotions={emotions} onEmotionUpdate={handleEmotionUpdate} />
+            <Calendar emotions={emotions} />
           </CardBody>
         </Card>
 

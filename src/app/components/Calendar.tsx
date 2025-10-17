@@ -5,7 +5,6 @@ import { Button } from "@heroui/react";
 
 interface CalendarProps {
   emotions: Record<string, string>;
-  onEmotionUpdate: (date: string, emotion: string) => void;
 }
 
 const emotionEmojis: Record<string, string> = {
@@ -16,7 +15,7 @@ const emotionEmojis: Record<string, string> = {
   emocionado: '🤩'
 };
 
-export default function Calendar({ emotions, onEmotionUpdate }: CalendarProps) {
+export default function Calendar({ emotions }: CalendarProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const today = new Date();

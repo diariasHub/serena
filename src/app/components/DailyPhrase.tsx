@@ -165,7 +165,7 @@ export default function DailyPhrase({ emotions }: DailyPhraseProps) {
         className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 border border-purple-100"
       >
         <p className="text-lg leading-relaxed text-gray-700 italic">
-          "{currentPhrase}"
+          &ldquo;{currentPhrase}&rdquo;
         </p>
       </motion.div>
 
